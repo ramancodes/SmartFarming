@@ -16,7 +16,7 @@ const HomeScreen = () => {
   
   const fetchWeatherData = async () => {
     if (!location) return;
-    const APIKEY = import.meta.env.VITE_WEATHER_API || VITE_WEATHER_API
+    const APIKEY = import.meta.env.VITE_WEATHER_API || process.env.VITE_WEATHER_API;
     const url = `https://api.weatherapi.com/v1/current.json?key=${APIKEY}&q=${location.replace(" ", "+")}`;
     
     try {
