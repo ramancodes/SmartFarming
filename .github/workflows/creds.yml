@@ -1,0 +1,12 @@
+name: smartFarmingCreds
+on: push
+env:
+  filename: .env
+jobs:
+  createart:
+    runs-on: ubuntu-latest
+    steps:
+      -name: Create Artifacts
+       run: echo "VITE_NEWS_API = ${{secrets.VITE_NEWS_API}} \nVITE_WEATHER_API = {{secrets.VITE_WEATHER_API}}" > .env
+      -name: display artifact
+       run: cat .env
