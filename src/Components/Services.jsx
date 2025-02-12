@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { ChevronDown, ChevronUp, ArrowLeft } from "lucide-react";
 import { AppContext } from "../Context/AppContext";
 import WeatherComponent from "./WeatherForcasting";
-import PredictionComponent from "./CropYieldPrediction";
+import RecommendationComponent from "./CropRecommendation";
 import DiseaseDetectionComponent from "./CropDieseaseDetection";
 
 const Services = () => {
@@ -30,20 +30,19 @@ const Services = () => {
       ],
     },
     {
-      title: "Crop Yield Prediction",
-      shortDescription: "Predict and optimize your crop yields",
+      title: "Smart Crop Recommendation",
+      shortDescription: "Choose the perfect crops for your farm",
       fullDescription:
-        "Using advanced technology, we predict the crop yield based on various environmental factors like soil health, weather patterns, and plant growth stages.",
+      "Using advanced technology, we help farmers select the most suitable crops based on soil composition, climate conditions, and regional growing patterns.",
       features: [
-        "Real-time monitoring",
-        "Weather pattern analysis",
-        "Soil health tracking",
-        "Growth stage predictions",
+      "Soil analysis interpretation",
+      "Climate suitability mapping",
+      "Season-wise crop suggestions"
       ],
       actionButtons: [
         {
-          label: "View Prediction",
-          action: () => setActiveComponent("prediction"),
+          label: "View Recommendation",
+          action: () => setActiveComponent("recommendation"),
           color: "bg-green-500",
         }
       ],
@@ -69,8 +68,8 @@ const Services = () => {
     },
   ];
 
-  if (activeComponent === "prediction") {
-    return <PredictionComponent onBack={handleBack} />;
+  if (activeComponent === "recommendation") {
+    return <RecommendationComponent onBack={handleBack} />;
   }
 
   if (activeComponent === "disease") {

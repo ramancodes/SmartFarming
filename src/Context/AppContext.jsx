@@ -20,6 +20,7 @@ const AppContextProvider = (props)=>{
 
     const WEATHER_APIKEY = import.meta.env.VITE_WEATHER_API;
     const NEWS_APIKEY = import.meta.env.VITE_NEWS_API;
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
     const fetchWeatherData = async () => {
         if (!location) return;
@@ -75,7 +76,8 @@ const AppContextProvider = (props)=>{
         condition, setCondition,
         forcastedWeather, setForcastedWeather,
         error, setError,
-        fetchWeatherData
+        fetchWeatherData,
+        BACKEND_URL
     }
 
     return (

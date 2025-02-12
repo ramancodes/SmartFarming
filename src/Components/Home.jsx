@@ -24,7 +24,7 @@ const HomeScreen = () => {
   const MAXLength = 200;
 
   function truncateString(str) {
-    console.log(str.length);
+    // console.log(str.length);
 
     if (str.length < 10) {
       return "";
