@@ -108,7 +108,7 @@ const RecommendationComponent = ({ onBack }) => {
           <div className="flex flex-col space-y-2">
             <label className="font-medium">Soil Potassium Quantity</label>
             <input
-              type="text"
+              type="number"
               name="potassium"
               value={formData.potassium}
               onChange={handleInputChange}
