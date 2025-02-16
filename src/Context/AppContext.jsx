@@ -1,9 +1,13 @@
+import axios from "axios";
 import { createContext, useState } from "react";
+import { toast } from "react-toastify";
 
 export const AppContext = createContext()
 
 const AppContextProvider = (props)=>{
 
+    const [token, setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token') : false)
+    const [user, setUser] = useState({})
     const [currentPage, setCurrentPage] = useState('home');
     const [location, setLocation] = useState('Noida');
     const [selectedService, setSelectedService] = useState(null);
@@ -17,6 +21,14 @@ const AppContextProvider = (props)=>{
     const [country, setCountry] = useState(null);
     const [error, setError] = useState(null);
     const [forcastedWeather, setForcastedWeather] = useState([]);
+
+    const formatedDate = (oldDate)=>{
+      const date = new Date(oldDate)
+      const newDate = date.getFullYear() + '-' + String(Number(date.getMonth())+1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
+      console.log(oldDate);
+      console.log(newDate);
+      return newDate
+    }
 
     const WEATHER_APIKEY = import.meta.env.VITE_WEATHER_API;
     const NEWS_APIKEY = import.meta.env.VITE_NEWS_API;
@@ -55,6 +67,35 @@ const AppContextProvider = (props)=>{
         setSelectedService(null);
       };
 
+    const getUserProfile = async () =>{
+      if(token){
+        try {
+          const params = {
+            token
+          }
+          const response = await axios.post(`${BACKEND_URL}/get_user`, params, {headers: { 'Content-Type': 'application/json' }});
+          if(response.data.success){
+            const data = response.data.user;
+            // console.log(data);
+            setUser({
+              email: data[0],
+              name: data[1],
+              gender: data[2]?data[2]:'',
+              phoneNo: data[3]?data[3]:'',
+              location: data[4]?data[4]:'',
+              dob: data[5] ? formatedDate(data[5]):'',
+              registeredOn: formatedDate(data[6])
+            }) 
+          }else {
+            console.log(response.data.message);
+            }
+        } catch (err) {
+          console.log(err);
+          toast.error(response.data.message)
+        }
+      }
+    }
+
     const value = {
         WEATHER_APIKEY,
         NEWS_APIKEY,
@@ -77,7 +118,10 @@ const AppContextProvider = (props)=>{
         forcastedWeather, setForcastedWeather,
         error, setError,
         fetchWeatherData,
-        BACKEND_URL
+        BACKEND_URL,
+        token, setToken,
+        user, setUser,
+        getUserProfile
     }
 
     return (

@@ -4,9 +4,10 @@ import { AppContext } from "../Context/AppContext";
 import WeatherComponent from "./WeatherForcasting";
 import RecommendationComponent from "./CropRecommendation";
 import DiseaseDetectionComponent from "./CropDieseaseDetection";
+import { toast } from "react-toastify";
 
 const Services = () => {
-  const {handleBack, selectedService, setSelectedService, activeComponent, setActiveComponent} = useContext(AppContext);
+  const {handleBack, selectedService, setSelectedService, activeComponent, setActiveComponent, token} = useContext(AppContext);
 
   const services = [
     {
@@ -24,7 +25,13 @@ const Services = () => {
       actionButtons: [
         {
           label: "View Forecast",
-          action: () => setActiveComponent("weather"),
+          action: () => {
+            if(!token){
+              toast.warn('Login to continue')
+            } else{
+              setActiveComponent("weather")
+            }
+            },
           color: "bg-green-500",
         }
       ],
@@ -42,7 +49,13 @@ const Services = () => {
       actionButtons: [
         {
           label: "View Recommendation",
-          action: () => setActiveComponent("recommendation"),
+          action: () => {
+            if(!token){
+              toast.warn('Login to continue')
+            } else{
+              setActiveComponent("recommendation")
+            }
+            },
           color: "bg-green-500",
         }
       ],
@@ -61,7 +74,13 @@ const Services = () => {
       actionButtons: [
         {
           label: "Scan Plants",
-          action: () => setActiveComponent("disease"),
+          action: () => {
+            if(!token){
+              toast.warn('Login to continue')
+            } else{
+              setActiveComponent("disease")
+            }
+            },
           color: "bg-green-500",
         }
       ],
