@@ -25,8 +25,6 @@ const AppContextProvider = (props)=>{
     const formatedDate = (oldDate)=>{
       const date = new Date(oldDate)
       const newDate = date.getFullYear() + '-' + String(Number(date.getMonth())+1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
-      console.log(oldDate);
-      console.log(newDate);
       return newDate
     }
 
