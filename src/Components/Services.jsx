@@ -1,16 +1,22 @@
 import React, { useContext, useState } from "react";
-import { ChevronDown, ChevronUp, ArrowRight, Cloud, Leaf, Bug, ArrowLeft } from "lucide-react";
+import { ChevronDown, ChevronUp, ArrowRight, Cloud, Leaf, Bug, Droplet, FlaskConical, BookOpen, ArrowLeft } from "lucide-react";
 import { AppContext } from "../Context/AppContext";
 import WeatherComponent from "./WeatherForcasting";
 import RecommendationComponent from "./CropRecommendation";
 import DiseaseDetectionComponent from "./CropDieseaseDetection";
 import { toast } from "react-toastify";
+import FarmerTraning from "./FarmerTraining";
+import SoilHealth from "./SoilHealth";
+import IrrigationManagement from "./IrrigationManagement";
 
 const ServiceCard = ({ service, index, isSelected, onSelect, onAction }) => {
   const icons = {
     "Weather Forecasting": Cloud,
     "Smart Crop Recommendation": Leaf,
     "Plant Disease Detection": Bug,
+    "Irrigation Management": Droplet,
+    "Soil Health Analysis": FlaskConical,
+    "Farmer Training": BookOpen,
   };
   const IconComponent = icons[service.title];
   
@@ -164,6 +170,75 @@ const Services = () => {
         },
       }],
     },
+    {
+      title: "Irrigation Management",
+      shortDescription: "Smart irrigation solutions for efficient water usage",
+      fullDescription:
+        "Optimize your water usage with our intelligent irrigation management system. Get precise recommendations based on soil moisture, weather conditions, and crop requirements.",
+      features: [
+        "Real-time soil moisture monitoring",
+        "Automated irrigation scheduling",
+        "Water usage analytics",
+        "Drought stress prediction",
+        "Water conservation recommendations",
+      ],
+      actionButtons: [{
+        label: "Manage Irrigation",
+        action: () => {
+          if(!token) {
+            toast.warn('Login to continue')
+          } else {
+            setActiveComponent("irrigation")
+          }
+        },
+      }],
+    },
+    {
+      title: "Soil Health Analysis",
+      shortDescription: "Comprehensive soil testing and management solutions",
+      fullDescription:
+        "Get detailed insights into your soil's health with our advanced analysis tools. Receive personalized recommendations for soil improvement and maintenance.",
+      features: [
+        "Detailed nutrient analysis",
+        "pH level monitoring",
+        "Organic matter content assessment",
+        "Fertilizer recommendations",
+        "Soil improvement tracking",
+      ],
+      actionButtons: [{
+        label: "Analyze Soil",
+        action: () => {
+          if(!token) {
+            toast.warn('Login to continue')
+          } else {
+            setActiveComponent("soil")
+          }
+        },
+      }],
+    },
+    {
+      title: "Farmer Training",
+      shortDescription: "Educational resources and training programs for farmers",
+      fullDescription:
+        "Access comprehensive training materials and expert guidance to enhance your farming knowledge and skills. Learn about modern farming techniques, sustainable practices, and agricultural innovations.",
+      features: [
+        "Video tutorials",
+        "Interactive workshops",
+        "Expert consultations",
+        "Best practices guides",
+        "Community forums",
+      ],
+      actionButtons: [{
+        label: "Start Learning",
+        action: () => {
+          if(!token) {
+            toast.warn('Login to continue')
+          } else {
+            setActiveComponent("training")
+          }
+        },
+      }],
+    },
   ];
 
   if (activeComponent === "recommendation") {
@@ -176,6 +251,18 @@ const Services = () => {
 
   if (activeComponent === "weather") {
     return <WeatherComponent onBack={handleBack} />;
+  }
+
+  if (activeComponent === "irrigation") {
+    return <IrrigationManagement onBack={handleBack} />;
+  }
+
+  if (activeComponent === "soil") {
+    return <SoilHealth onBack={handleBack} />;
+  }
+
+  if (activeComponent === "training") {
+    return <FarmerTraning onBack={handleBack} />;
   }
 
   return (
