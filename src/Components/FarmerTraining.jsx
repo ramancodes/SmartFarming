@@ -1,127 +1,119 @@
-import React, { useState } from "react";
-import { ArrowLeft, Camera, X, Scan } from "lucide-react";
+import React from 'react';
 
-const FarmerTraning = ({ onBack }) => {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [fileName, setFileName] = useState(null);
-  const [scanResult, setScanResult] = useState(null);
+const Card = ({ children, className = '' }) => (
+  <div className={`rounded-lg p-6 ${className}`}>
+    {children}
+  </div>
+);
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (file && file.type.startsWith("image/")) {
-      setFileName(file.name);
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setSelectedImage(e.target.result);
-      };
-      reader.readAsDataURL(file);
-      setScanResult(null);
+const CardHeader = ({ children }) => (
+  <div className="mb-4">
+    {children}
+  </div>
+);
+
+const CardContent = ({ children }) => (
+  <div>
+    {children}
+  </div>
+);
+
+const FarmerTraining = () => {
+  const courses = [
+    {
+      title: "Sustainable Farming Practices",
+      description: "Learn eco-friendly farming methods that improve soil health and crop yield while reducing environmental impact.",
+    },
+    {
+      title: "Organic Pest Control",
+      description: "Discover natural methods to protect your crops from pests without using harmful chemicals.",
+    },
+    {
+      title: "Water Management",
+      description: "Master efficient irrigation techniques and water conservation strategies for your farm.",
     }
-  };
+  ];
 
-  const handleRemoveImage = () => {
-    setSelectedImage(null);
-    setFileName(null);
-    setScanResult(null);
-  };
-
-  const handleScan = () => {
-    if (fileName) {
-      setScanResult(fileName);
+  const resources = [
+    {
+      title: "Farming Guides",
+      description: "Access our collection of detailed guides covering various farming topics.",
+      cta: "Download",
+    },
+    {
+      title: "Monthly Webinars",
+      description: "Join our expert-led webinars discussing seasonal farming challenges and solutions.",
+      cta: "Register",
     }
-  };
+  ];
 
   return (
-    <div className="mt-14 min-h-screen bg-gray-50">
-      <div className="p-4 max-w-lg mx-auto">
-        <div className="flex items-center mb-4">
-          <button onClick={onBack} className="mr-2">
-            <ArrowLeft size={24} className="text-green-600" />
-          </button>
-          <h2 className="text-xl font-bold">Disease Detection</h2>
+    <div className="min-h-screen bg-green-50 mt-14">
+      {/* Header */}
+      <header className="bg-green-800 text-white py-8 px-4 text-center">
+        <h1 className="text-3xl font-bold mb-2">Farmer Training Center</h1>
+        <p className="text-lg">Empowering farmers with knowledge and skills</p>
+      </header>
+
+      <main className="max-w-6xl mx-auto px-4 py-8">
+        {/* Hero Section */}
+        <section className="text-center mb-12">
+          <h2 className="text-2xl font-bold text-green-800 mb-4">Learn Modern Farming Techniques</h2>
+          <p className="text-gray-600">Join our comprehensive training programs designed for both new and experienced farmers</p>
+        </section>
+
+        {/* Video Section */}
+        <div className="relative w-full aspect-video mb-12 rounded-lg overflow-hidden">
+          {/* <img 
+            src="/api/placeholder/1200/675" 
+            alt="Featured Training Video"
+            className="absolute inset-0 w-full h-full object-cover"
+          /> */}
+          <iframe className="absolute inset-0 w-full h-full object-cover" width="560" height="315" src="https://www.youtube.com/embed/O0iQbCf-A_M?si=ShnDwnbXCrUWZxCV" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
-        {/* Image Upload Section */}
-        <div className="bg-white rounded-xl shadow p-4 mb-4">
-          <div className="border-2 border-dashed border-gray-300 rounded-xl p-4">
-            {selectedImage ? (
-              <div className="relative mb-4">
-                <img
-                  src={selectedImage}
-                  alt="Selected plant"
-                  className="w-full h-64 object-cover rounded-lg"
-                />
-                <button
-                  onClick={handleRemoveImage}
-                  className="absolute top-2 right-2 p-2 bg-black/50 rounded-full text-white"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-            ) : (
-              <div className="h-48 flex items-center justify-center border-2 border-dashed border-gray-200 rounded-lg mb-4">
-                <p className="text-gray-500 text-center">No image selected</p>
-              </div>
-            )}
 
-            {scanResult && (
-              <div className="mb-4 p-3 bg-gray-50 rounded-lg">
-                <p className="text-sm font-medium">File: {scanResult}</p>
-              </div>
-            )}
-
-            <input
-              type="file"
-              accept="image/*"
-              id="image-upload"
-              className="hidden"
-              onChange={handleImageUpload}
-              capture="environment"
-            />
-
-            <div className="flex flex-col gap-3">
-              <label
-                htmlFor="image-upload"
-                className="w-full flex items-center justify-center gap-2 bg-green-500 text-white px-6 py-4 rounded-xl cursor-pointer hover:bg-green-600 active:bg-green-700 transition-colors text-lg font-medium"
-              >
-                <Camera size={24} />
-                Upload Image
-              </label>
-
-              <button
-                onClick={handleScan}
-                disabled={!selectedImage}
-                className={`w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl text-lg font-medium transition-colors
-                  ${
-                    selectedImage
-                      ? "bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700"
-                      : "bg-gray-200 text-gray-400 cursor-not-allowed"
-                  }`}
-              >
-                <Scan size={24} />
-                Scan
-              </button>
-
-              <p className="text-sm text-gray-500 text-center">
-                Tap to scan your plants
-              </p>
-            </div>
+        {/* Courses Section */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-green-800 mb-6">Featured Courses</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {courses.map((course, index) => (
+              <Card key={index} className="bg-white shadow-lg hover:shadow-xl transition-shadow">
+                <CardHeader>
+                  <h3 className="text-xl font-semibold text-green-700">{course.title}</h3>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 mb-4">{course.description}</p>
+                  <button className="bg-green-800 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors w-full">
+                    Learn More
+                  </button>
+                </CardContent>
+              </Card>
+            ))}
           </div>
-        </div>
+        </section>
 
-        {/* Recent Scans Section */}
-        <div className="bg-white rounded-xl shadow p-4">
-          <h3 className="font-semibold text-lg mb-3">Recent Scans</h3>
-          <div className="space-y-3">
-          <div className="p-4 bg-gray-50 rounded-xl active:bg-gray-100 transition-colors">
-                <div className="flex justify-between items-center">
-                  <span className="font-medium">No Data Avilable</span>
-                </div>
-              </div>
+        {/* Resources Section */}
+        <section>
+          <h2 className="text-2xl font-bold text-green-800 mb-6">Free Resources</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {resources.map((resource, index) => (
+              <Card key={index} className="bg-white shadow-lg hover:shadow-xl transition-shadow">
+                <CardHeader>
+                  <h3 className="text-xl font-semibold text-green-700">{resource.title}</h3>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 mb-4">{resource.description}</p>
+                  <button className="bg-green-800 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors w-full">
+                    {resource.cta}
+                  </button>
+                </CardContent>
+              </Card>
+            ))}
           </div>
-        </div>
-      </div>
+        </section>
+      </main>
     </div>
   );
 };
 
-export default FarmerTraning;
+export default FarmerTraining;
