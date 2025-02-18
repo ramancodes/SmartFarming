@@ -8,7 +8,7 @@ const Profile = () => {
 
   useEffect(()=>{
     getUserProfile()
-  },[])
+  },[token])
 
   return (
     <div>

@@ -28,6 +28,12 @@ const UserProfile = () => {
     });
   };
 
+  useEffect(()=>{
+    if(user){
+      setEditedProfile(user)
+    }
+  }, [user])
+
   const handleSubmit = (e) => {
     setIsLoading(true);
     setTimeout(async () => {
