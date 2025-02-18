@@ -231,11 +231,11 @@ const Services = () => {
       actionButtons: [{
         label: "Start Learning",
         action: () => {
-          if(!token) {
-            toast.warn('Login to continue')
-          } else {
-            setActiveComponent("training")
-          }
+          // if(!token) {
+          //   toast.warn('Login to continue')
+          // } else {
+          // }
+          setActiveComponent("training")
         },
       }],
     },
