@@ -174,13 +174,13 @@ const Services = () => {
       title: "Irrigation Management",
       shortDescription: "Smart irrigation solutions for efficient water usage",
       fullDescription:
-        "Optimize your water usage with our intelligent irrigation management system. Get precise recommendations based on soil moisture, weather conditions, and crop requirements.",
+        "Optimize your water usage with our intelligent irrigation solutions. Get precise recommendations based on soil moisture, weather conditions, and crop requirements.",
       features: [
-        "Real-time soil moisture monitoring",
-        "Automated irrigation scheduling",
-        "Water usage analytics",
-        "Drought stress prediction",
-        "Water conservation recommendations",
+        "Soil moisture insights",
+        "Crop-specific irrigation tips",
+        "Water usage trends",
+        "Drought risk guidance",
+        "Water conservation practices",
       ],
       actionButtons: [{
         label: "Manage Irrigation",
@@ -193,29 +193,29 @@ const Services = () => {
         },
       }],
     },
-    {
-      title: "Soil Health Analysis",
-      shortDescription: "Comprehensive soil testing and management solutions",
-      fullDescription:
-        "Get detailed insights into your soil's health with our advanced analysis tools. Receive personalized recommendations for soil improvement and maintenance.",
-      features: [
-        "Detailed nutrient analysis",
-        "pH level monitoring",
-        "Organic matter content assessment",
-        "Fertilizer recommendations",
-        "Soil improvement tracking",
-      ],
-      actionButtons: [{
-        label: "Analyze Soil",
-        action: () => {
-          if(!token) {
-            toast.warn('Login to continue')
-          } else {
-            setActiveComponent("soil")
-          }
-        },
-      }],
-    },
+    // {
+    //   title: "Soil Health Analysis",
+    //   shortDescription: "Comprehensive soil testing and management solutions",
+    //   fullDescription:
+    //     "Get detailed insights into your soil's health with our advanced analysis tools. Receive personalized recommendations for soil improvement and maintenance.",
+    //   features: [
+    //     "Detailed nutrient analysis",
+    //     "pH level monitoring",
+    //     "Organic matter content assessment",
+    //     "Fertilizer recommendations",
+    //     "Soil improvement tracking",
+    //   ],
+    //   actionButtons: [{
+    //     label: "Analyze Soil",
+    //     action: () => {
+    //       if(!token) {
+    //         toast.warn('Login to continue')
+    //       } else {
+    //         setActiveComponent("soil")
+    //       }
+    //     },
+    //   }],
+    // },
     {
       title: "Farmer Training",
       shortDescription: "Educational resources and training programs for farmers",

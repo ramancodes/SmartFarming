@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { AppContext } from "../Context/AppContext";
 import axios from "axios";
+import FormatAndDisplayString from "./FormatString";
 
 const RecommendationComponent = ({ onBack }) => {
   const { BACKEND_URL } = useContext(AppContext);
@@ -82,7 +83,7 @@ const RecommendationComponent = ({ onBack }) => {
       <div className="bg-white rounded-lg shadow-md p-4 space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col space-y-2">
-            <label className="font-medium">Soil Nitrogen Quantity</label>
+            <label className="font-medium">Ratio of Nitrogen Content in Soil</label>
             <input
               type="number"
               name="nitrogen"
@@ -94,7 +95,7 @@ const RecommendationComponent = ({ onBack }) => {
             />
           </div>
           <div className="flex flex-col space-y-2">
-            <label className="font-medium">Soil Phosphorus Quantity</label>
+            <label className="font-medium">Ratio of Phosphorous content in Soil</label>
             <input
               type="number"
               name="phosphorus"
@@ -106,7 +107,7 @@ const RecommendationComponent = ({ onBack }) => {
             />
           </div>
           <div className="flex flex-col space-y-2">
-            <label className="font-medium">Soil Potassium Quantity</label>
+            <label className="font-medium">Ratio of Potassium content in Soil</label>
             <input
               type="number"
               name="potassium"
@@ -124,9 +125,11 @@ const RecommendationComponent = ({ onBack }) => {
               name="temperature"
               step={0.00000005}
               value={formData.temperature}
+              max={50}
+              min={5}
               onChange={handleInputChange}
               className="border rounded-md p-2"
-              placeholder="Enter Temperature in celcius"
+              placeholder="Enter Temperature in celcius between 5℃ to 50℃"
               required
             />
           </div>
@@ -138,19 +141,23 @@ const RecommendationComponent = ({ onBack }) => {
               name="humidity"
               value={formData.humidity}
               onChange={handleInputChange}
+              max={100}
+              min={0}
               className="border rounded-md p-2"
-              placeholder="Enter humidity percentage"
+              placeholder="Enter humidity percentage 0% to 100%"
               required
             />
           </div>
           <div className="flex flex-col space-y-2">
-            <label className="font-medium">Soil pH</label>
+            <label className="font-medium">ph Value of the Soil</label>
             <input
               type="number"
               step={0.00000005}
               name="ph"
               value={formData.ph}
               onChange={handleInputChange}
+              max={14}
+              min={0}
               className="border rounded-md p-2"
               placeholder="Enter soil ph value between 0 to 14"
               required
@@ -164,8 +171,10 @@ const RecommendationComponent = ({ onBack }) => {
               name="rainfall"
               value={formData.rainfall}
               onChange={handleInputChange}
+              max={300}
+              min={0}
               className="border rounded-md p-2"
-              placeholder="Enter rainfall measurement in mm"
+              placeholder="Enter rainfall measurement between 0mm to 300mm"
               required
             />
           </div>
@@ -209,16 +218,8 @@ const RecommendationComponent = ({ onBack }) => {
                   <span className="text-green-600">{formData.ph}</span>
                 </li>
                 <li className="flex flex-col md:flex-row justify-between p-2 bg-gray-50 rounded">
-                  <span className="font-medium">Soil Nitrogen Quantity</span>
-                  <span className="text-green-600">{formData.nitrogen}</span>
-                </li>
-                <li className="flex flex-col md:flex-row justify-between p-2 bg-gray-50 rounded">
-                  <span className="font-medium">Soil Phosphorus Quantity</span>
-                  <span className="text-green-600">{formData.phosphorus}</span>
-                </li>
-                <li className="flex flex-col md:flex-row justify-between p-2 bg-gray-50 rounded">
-                  <span className="font-medium">Soil Potassium Quantity</span>
-                  <span className="text-green-600">{formData.potassium}</span>
+                  <span className="font-medium">Nitrogen : Phosphorous : Potassium Ratio</span>
+                  <span className="text-green-600">{formData.nitrogen} : {formData.phosphorus} : {formData.potassium}</span>
                 </li>
                 <li className="flex flex-col md:flex-row justify-between p-2 bg-gray-50 rounded">
                   <span className="font-medium">Rainfall</span>
