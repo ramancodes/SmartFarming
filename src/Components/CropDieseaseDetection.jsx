@@ -55,9 +55,6 @@ const DiseaseDetectionComponent = ({ onBack }) => {
           'Content-Type': 'multipart/form-data',
         },
       });
-
-      console.log(responseData);
-      
       
       await new Promise(resolve => setTimeout(resolve, 1500));
       

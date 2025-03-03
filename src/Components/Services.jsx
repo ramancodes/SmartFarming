@@ -176,7 +176,6 @@ const Services = () => {
       fullDescription:
         "Optimize your water usage with our intelligent irrigation solutions. Get precise recommendations based on soil moisture, weather conditions, and crop requirements.",
       features: [
-        "Soil moisture insights",
         "Crop-specific irrigation tips",
         "Water usage trends",
         "Drought risk guidance",
@@ -185,11 +184,11 @@ const Services = () => {
       actionButtons: [{
         label: "Manage Irrigation",
         action: () => {
-          // if(!token) {
-          //   toast.warn('Login to continue')
-          // } else {
-            // }
-          setActiveComponent("irrigation")
+          if(!token) {
+            toast.warn('Login to continue')
+          } else {
+            setActiveComponent("irrigation")
+          }
         },
       }],
     },
@@ -231,11 +230,11 @@ const Services = () => {
       actionButtons: [{
         label: "Start Learning",
         action: () => {
-          // if(!token) {
-          //   toast.warn('Login to continue')
-          // } else {
-          // }
-          setActiveComponent("training")
+          if(!token) {
+            toast.warn('Login to continue')
+          } else {
+            setActiveComponent("training")
+          }
         },
       }],
     },

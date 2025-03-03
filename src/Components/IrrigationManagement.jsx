@@ -11,6 +11,13 @@ const IrrigationManagement = ({ onBack }) => {
     { id: "schedule", label: "Scheduling", icon: <Clock size={20} /> },
   ];
 
+  // Handle link clicks properly
+  const handleLinkClick = (url) => {
+    if (url && url !== "#") {
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+  };
+
   return (
     <div className="mt-14 min-h-screen bg-gray-50">
       <div className="p-4 max-w-lg mx-auto">
@@ -56,15 +63,15 @@ const IrrigationManagement = ({ onBack }) => {
 
               <div className="relative w-full aspect-video mb-8 md:mb-12 rounded-lg overflow-hidden">
               <iframe 
-              className="absolute inset-0 w-full h-full object-cover"
-              width="560" 
-              height="315" 
-              src="https://www.youtube.com/embed/Z9HAy9EYKKs?si=YkucJxZf0YLld87U" 
-              title="YouTube video player" 
-              frameBorder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-              referrerPolicy="strict-origin-when-cross-origin" 
-              allowFullScreen></iframe>
+                className="absolute inset-0 w-full h-full object-cover"
+                width="560" 
+                height="315" 
+                src="https://www.youtube.com/embed/K0ViMFTenDw?si=Lj5i8f6MqSlT7uZE" 
+                title="YouTube video player" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                referrerPolicy="strict-origin-when-cross-origin" 
+                allowFullScreen></iframe>
               </div>
 
               <h4 className="font-medium text-green-600 mt-4 mb-2">Key Components</h4>
@@ -91,6 +98,19 @@ const IrrigationManagement = ({ onBack }) => {
               <h3 className="text-lg font-semibold text-green-700 mb-3">
                 Irrigation Techniques
               </h3>
+
+              <div className="relative w-full aspect-video mb-8 md:mb-12 rounded-lg overflow-hidden">
+                <iframe 
+                  className="absolute inset-0 w-full h-full object-cover"
+                  width="560" 
+                  height="315" 
+                  src="https://www.youtube.com/embed/Z9HAy9EYKKs?si=YkucJxZf0YLld87U" 
+                  title="YouTube video player" 
+                  frameBorder="0" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                  referrerPolicy="strict-origin-when-cross-origin" 
+                  allowFullScreen></iframe>
+              </div>
               
               <div className="space-y-4 mb-4">
                 <div className="border border-gray-200 rounded-lg p-3">
@@ -125,15 +145,18 @@ const IrrigationManagement = ({ onBack }) => {
                   </p>
                 </div>
               </div>
-              
-              <div className="aspect-w-16 aspect-h-9 mb-4 rounded-lg overflow-hidden">
-                <iframe 
-                  className="w-full h-56 rounded-lg"
-                  src="https://www.youtube.com/embed/8U_0e-XSGWU" 
-                  title="Modern Irrigation Techniques"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                  allowFullScreen>
-                </iframe>
+
+              <div className="relative w-full aspect-video mb-8 md:mb-12 rounded-lg overflow-hidden">
+              <iframe 
+                className="absolute inset-0 w-full h-full object-cover"
+                width="560" 
+                height="315" 
+                src="https://www.youtube.com/embed/Ulf8E1XnhgI?si=UH3V2wsjhCbRBhy_" 
+                title="YouTube video player" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                referrerPolicy="strict-origin-when-cross-origin" 
+                allowFullScreen></iframe>
               </div>
             </div>
           )}
@@ -278,14 +301,14 @@ const IrrigationManagement = ({ onBack }) => {
               <h4 className="font-medium">Local Extension Services</h4>
               <p className="text-sm text-gray-600 mt-1">Contact your local agricultural extension office for region-specific irrigation recommendations.</p>
             </div>
-            <div className="p-3 bg-gray-50 rounded-lg border-l-4 border-blue-500">
-              <h4 className="font-medium">USDA Resources</h4>
+            <div className="p-3 bg-gray-50 rounded-lg border-l-4 border-blue-500" onClick={()=>handleLinkClick('https://jalshakti-dowr.gov.in/')}>
+              <h4 className="font-medium">Water Resources</h4>
               <p className="text-sm text-gray-600 mt-1">Access government resources for irrigation best practices and potential funding assistance.</p>
             </div>
-            <div className="p-3 bg-gray-50 rounded-lg border-l-4 border-yellow-500">
+            {/* <div className="p-3 bg-gray-50 rounded-lg border-l-4 border-yellow-500">
               <h4 className="font-medium">Irrigation Associations</h4>
               <p className="text-sm text-gray-600 mt-1">Join professional networks to stay updated on the latest irrigation technologies and practices.</p>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
