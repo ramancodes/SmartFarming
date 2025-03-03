@@ -19,6 +19,8 @@ const WeatherComponent = ({ onBack }) => {
     fetchWeatherData,
   } = useContext(AppContext);
 
+  const [inputValue, setInputValue] = useState(location);
+
   function getDayOfWeek(dateStr) {
     const date = new Date(dateStr); // Convert the date string to a Date object
     const daysOfWeek = [
@@ -37,6 +39,20 @@ const WeatherComponent = ({ onBack }) => {
     fetchWeatherData();
   }, [location]);
 
+  useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      setLocation(inputValue);
+    }, 1000);
+
+    return () => {
+      clearTimeout(debounceTimer);
+    };
+  }, [inputValue]);
+
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
+
   return (
     <div className="p-4  mt-14">
       <div className="flex items-center mb-4">
@@ -53,8 +69,8 @@ const WeatherComponent = ({ onBack }) => {
             type="text"
             className="p-2 border border-gray-300 rounded-lg"
             placeholder="Enter location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
+            value={inputValue}
+            onChange={handleInputChange}
           />
           <Search
             size={24}

@@ -76,6 +76,7 @@ const HomeScreen = () => {
   const [errorNews, setErrorNews] = useState(null);
   const [seeMore, setSeeMore] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [inputValue, setInputValue] = useState(location);
 
   const truncateString = (str, maxLength = 200) => {
     if (!str || str.length < 10) return "";
@@ -105,8 +106,22 @@ const HomeScreen = () => {
   }, [location]);
 
   useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      setLocation(inputValue);
+    }, 1000);
+
+    return () => {
+      clearTimeout(debounceTimer);
+    };
+  }, [inputValue]);
+
+  useEffect(() => {
     fetchNewsData();
   }, []);
+
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
 
   return (
     <div className="relative min-h-screen w-full bg-gray-50 mt-14 mb-16">
@@ -156,8 +171,8 @@ const HomeScreen = () => {
                     type="text"
                     className="flex-1 p-2 outline-none bg-transparent"
                     placeholder="Search location..."
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
+                    value={inputValue}
+                    onChange={handleInputChange}
                     onFocus={() => setIsSearchFocused(true)}
                     onBlur={() => setIsSearchFocused(false)}
                   />
