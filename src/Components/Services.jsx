@@ -185,11 +185,11 @@ const Services = () => {
       actionButtons: [{
         label: "Manage Irrigation",
         action: () => {
-          if(!token) {
-            toast.warn('Login to continue')
-          } else {
-            setActiveComponent("irrigation")
-          }
+          // if(!token) {
+          //   toast.warn('Login to continue')
+          // } else {
+            // }
+          setActiveComponent("irrigation")
         },
       }],
     },

@@ -30,14 +30,14 @@ const FarmerTraining = ({ onBack }) => {
     {
       title: "Organic Pest Control",
       description: "Discover natural methods to protect your crops from pests without using harmful chemicals.",
-      source: "#", // Fixed typo in property name
-      link: "#"
+      source: "South Dakota State University",
+      link: "https://extension.sdstate.edu/organic-pest-control-methods"
     },
     {
       title: "Water Management",
       description: "Master efficient irrigation techniques and water conservation strategies for your farm.",
-      source: "#", // Fixed typo in property name
-      link: "#"
+      source: "Shegal Foundation",
+      link: "https://www.smsfoundation.org/water-management/"
     }
   ];
 
@@ -45,6 +45,7 @@ const FarmerTraining = ({ onBack }) => {
     {
       title: "Farming Guides",
       description: "Access our collection of detailed guides covering various farming topics.",
+      source: "National Institute of Agricultural Managment",
       cta: "Download",
       link: "https://www.manage.gov.in/publications/farmerbook.pdf"
     }
@@ -152,6 +153,7 @@ const FarmerTraining = ({ onBack }) => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-600 mb-4 text-sm md:text-base">{resource.description}</p>
+                  <p className="text-gray-600 mb-4 text-xs md:text-base">Source: {resource.source}</p>
                   <button 
                     className="bg-green-800 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors w-full"
                     onClick={() => handleLinkClick(resource.link)}

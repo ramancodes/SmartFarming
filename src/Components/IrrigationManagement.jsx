@@ -54,14 +54,17 @@ const IrrigationManagement = ({ onBack }) => {
                 significantly reduced, especially in arid or semi-arid regions.
               </p>
 
-              <div className="aspect-w-16 aspect-h-9 mb-4 rounded-lg overflow-hidden">
-                <iframe 
-                  className="w-full h-56 rounded-lg"
-                  src="https://www.youtube.com/embed/7f3XKEUqwWA" 
-                  title="Basics of Irrigation Systems"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                  allowFullScreen>
-                </iframe>
+              <div className="relative w-full aspect-video mb-8 md:mb-12 rounded-lg overflow-hidden">
+              <iframe 
+              className="absolute inset-0 w-full h-full object-cover"
+              width="560" 
+              height="315" 
+              src="https://www.youtube.com/embed/Z9HAy9EYKKs?si=YkucJxZf0YLld87U" 
+              title="YouTube video player" 
+              frameBorder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              referrerPolicy="strict-origin-when-cross-origin" 
+              allowFullScreen></iframe>
               </div>
 
               <h4 className="font-medium text-green-600 mt-4 mb-2">Key Components</h4>
