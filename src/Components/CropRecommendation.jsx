@@ -3,6 +3,7 @@ import { ArrowLeft } from "lucide-react";
 import { AppContext } from "../Context/AppContext";
 import axios from "axios";
 import FormatAndDisplayString from "./FormatString";
+import { toast } from "react-toastify";
 
 const RecommendationComponent = ({ onBack }) => {
   const { BACKEND_URL } = useContext(AppContext);
@@ -69,6 +70,31 @@ const RecommendationComponent = ({ onBack }) => {
     }, 1000);
   };
 
+  const handleFetchIOTData = () => {
+    setIsLoading(true);
+    setTimeout(async () => {
+      const url = BACKEND_URL+'/get-senor-data';
+      const response = await axios.get(url);
+      // console.log(response);
+      
+      if(response.status === 200){
+        if(response.data.success === true){
+          setFormData(prevState => ({
+            ...prevState,
+            temperature: response.data.data.temperature,
+            humidity: response.data.data.humidity
+          }))
+        } else{
+          toast.error("Data Cannot Be Fetched At This Moment")
+        }
+      } else {        
+        toast.error("Data Cannot Be Fetched At This Moment")
+      }
+      
+      setIsLoading(false);
+    }, 1000);
+  }
+
   const allFieldsFilled = Object.values(formData).every(value => value !== "");
 
   return (
@@ -82,6 +108,50 @@ const RecommendationComponent = ({ onBack }) => {
 
       <div className="bg-white rounded-lg shadow-md p-4 space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex justify-between">
+            <label className="font-medium">Get Current Temperature <br /> & Humidity of Soil</label>
+            <button
+              onClick={handleFetchIOTData}
+              disabled={isLoading}
+              className={`px-3 rounded-md text-white font-medium transition-colors
+                ${!isLoading 
+                  ? 'bg-green-600 hover:bg-green-700' 
+                  : 'bg-gray-400 cursor-not-allowed'}`}
+            >
+              {isLoading ? 'Fetching...' : 'Fetch'}
+            </button>
+          </div>
+          <hr />
+          <div className="flex flex-col space-y-2">
+            <label className="font-medium">Soil Temperature (℃)</label>
+            <input
+              type="number"
+              name="temperature"
+              step={0.00000005}
+              value={formData.temperature}
+              max={50}
+              min={5}
+              onChange={handleInputChange}
+              className="border rounded-md p-2"
+              placeholder="Enter Temperature in celcius between 5℃ to 50℃"
+              required
+            />
+          </div>
+          <div className="flex flex-col space-y-2">
+            <label className="font-medium">Soil Humidity (%)</label>
+            <input
+              type="number"
+              step={0.00000005}
+              name="humidity"
+              value={formData.humidity}
+              onChange={handleInputChange}
+              max={100}
+              min={0}
+              className="border rounded-md p-2"
+              placeholder="Enter humidity percentage 0% to 100%"
+              required
+            />
+          </div>
           <div className="flex flex-col space-y-2">
             <label className="font-medium">Ratio of Nitrogen Content in Soil</label>
             <input
@@ -115,36 +185,6 @@ const RecommendationComponent = ({ onBack }) => {
               onChange={handleInputChange}
               className="border rounded-md p-2"
               placeholder="Enter soil Potassium Quantity"
-              required
-            />
-          </div>
-          <div className="flex flex-col space-y-2">
-            <label className="font-medium">Soil Temperature (℃)</label>
-            <input
-              type="number"
-              name="temperature"
-              step={0.00000005}
-              value={formData.temperature}
-              max={50}
-              min={5}
-              onChange={handleInputChange}
-              className="border rounded-md p-2"
-              placeholder="Enter Temperature in celcius between 5℃ to 50℃"
-              required
-            />
-          </div>
-          <div className="flex flex-col space-y-2">
-            <label className="font-medium">Soil Humidity (%)</label>
-            <input
-              type="number"
-              step={0.00000005}
-              name="humidity"
-              value={formData.humidity}
-              onChange={handleInputChange}
-              max={100}
-              min={0}
-              className="border rounded-md p-2"
-              placeholder="Enter humidity percentage 0% to 100%"
               required
             />
           </div>

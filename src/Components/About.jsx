@@ -147,7 +147,7 @@ const About = () => {
                 <Droplets className="w-8 h-8 text-orange-600" />
               </div>
               <h3 className="font-semibold mb-2">Smart Irrigation</h3>
-              <p className="text-gray-600">Automated water management systems</p>
+              <p className="text-gray-600">Smart Solutions for water management Systems</p>
             </div>
           </div>
         </div>
