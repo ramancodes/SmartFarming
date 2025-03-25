@@ -1,5 +1,8 @@
-import React, { useContext, useState } from "react";
-import { ChevronDown, ChevronUp, ArrowRight, Cloud, Leaf, Bug, Droplet, FlaskConical, BookOpen, ArrowLeft } from "lucide-react";
+import React, { useContext, useEffect, useState } from "react";
+import { 
+  ChevronDown, ChevronUp, ArrowRight, Cloud, Leaf, Bug, 
+  Droplet, FlaskConical, BookOpen, ArrowLeft, Zap 
+} from "lucide-react";
 import { AppContext } from "../Context/AppContext";
 import WeatherComponent from "./WeatherForcasting";
 import RecommendationComponent from "./CropRecommendation";
@@ -10,6 +13,9 @@ import SoilHealth from "./SoilHealth";
 import IrrigationManagement from "./IrrigationManagement";
 
 const ServiceCard = ({ service, index, isSelected, onSelect, onAction }) => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const icons = {
     "Weather Forecasting": Cloud,
     "Smart Crop Recommendation": Leaf,
@@ -22,70 +28,94 @@ const ServiceCard = ({ service, index, isSelected, onSelect, onAction }) => {
   
   return (
     <div 
-      className={`bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 ${
-        isSelected ? 'ring-2 ring-green-500' : 'hover:shadow-lg'
-      }`}
+      className={`relative group transform transition-all duration-300 ${
+        isSelected ? 'scale-[1.02] z-10 shadow-2xl' : 'hover:scale-[1.02]'
+      } bg-white rounded-2xl overflow-hidden`}
     >
+      {/* Gradient Background Overlay */}
+      <div 
+        className={`absolute inset-0 opacity-10 group-hover:opacity-20 transition-all duration-300 ${
+          isSelected 
+            ? 'bg-gradient-to-br from-green-400 to-blue-500' 
+            : 'bg-gradient-to-br from-gray-100 to-gray-200'
+        }`}
+      />
+
       <div
-        className="p-6 cursor-pointer"
+        className="relative p-4 sm:p-6 cursor-pointer"
         onClick={onSelect}
       >
-        <div className="flex items-start justify-between">
-          <div className="flex items-start space-x-4">
-            <div className={`p-3 rounded-lg ${
-              isSelected ? 'bg-green-100' : 'bg-gray-100'
+        <div className="flex flex-col sm:flex-row items-start justify-between space-y-4 sm:space-y-0">
+          <div className="flex flex-col sm:flex-row items-start space-y-4 sm:space-y-0 sm:space-x-6 w-full">
+            <div className={`self-start p-3 sm:p-4 rounded-xl shadow-md transition-all duration-300 ${
+              isSelected 
+                ? 'bg-green-100 sm:-translate-y-2 sm:rotate-6' 
+                : 'bg-gray-100 group-hover:rotate-6'
             }`}>
-              <IconComponent className={`w-6 h-6 ${
+              <IconComponent className={`w-6 h-6 sm:w-8 sm:h-8 ${
                 isSelected ? 'text-green-600' : 'text-gray-600'
               }`} />
             </div>
-            <div>
-              <h2 className="text-xl font-semibold text-gray-800">{service.title}</h2>
-              <p className="text-gray-600 mt-1">{service.shortDescription}</p>
+            <div className="flex-1">
+              <h2 className={`text-xl sm:text-2xl font-bold transition-colors duration-300 ${
+                isSelected ? 'text-green-700' : 'text-gray-800 group-hover:text-green-600'
+              }`}>
+                {service.title}
+              </h2>
+              <p className="text-sm sm:text-base text-gray-600 mt-2 max-w-md">
+                {service.shortDescription}
+              </p>
             </div>
           </div>
           <div className={`text-gray-400 transition-transform duration-300 ${
             isSelected ? 'rotate-180' : ''
           }`}>
-            <ChevronDown size={24} />
+            <ChevronDown size={24} className="group-hover:text-green-600" />
           </div>
         </div>
 
         <div className={`mt-6 transition-all duration-300 ${
           isSelected ? 'opacity-100 h-auto' : 'opacity-0 h-0 overflow-hidden'
         }`}>
-          <div className="border-t pt-4">
-            <p className="text-gray-700 mb-6 leading-relaxed">
+          <div className="border-t border-dashed border-gray-200 pt-6">
+            <p className="text-sm sm:text-base text-gray-700 mb-6 leading-relaxed">
               {service.fullDescription}
             </p>
 
             <div className="mb-6">
-              <h3 className="text-lg font-semibold mb-4 text-gray-800">
+              <h3 className="text-lg sm:text-xl font-semibold mb-4 text-gray-800 flex items-center">
+                <Zap className="mr-2 sm:mr-3 text-yellow-500 w-5 h-5 sm:w-6 sm:h-6" />
                 Key Features
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3">
                 {service.features.map((feature, idx) => (
                   <div 
                     key={idx} 
-                    className="flex items-center space-x-2 text-gray-600 bg-gray-50 p-3 rounded-lg"
+                    className="flex items-center space-x-3 text-sm sm:text-base text-gray-700 bg-gray-50 p-3 rounded-xl hover:bg-green-50 transition-colors"
                   >
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span>{feature}</span>
+                    <div className="w-2 h-2 sm:w-3 sm:h-3 bg-green-500 rounded-full animate-pulse"></div>
+                    <span className="font-medium">{feature}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {service.actionButtons.map((button, idx) => (
-              <button
-                key={idx}
-                onClick={button.action}
-                className="w-full md:w-auto bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition-colors duration-300 flex items-center justify-center space-x-2 group"
-              >
-                <span>{button.label}</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-            ))}
+            <div className="space-y-4">
+              {service.actionButtons.map((button, idx) => (
+                <button
+                  key={idx}
+                  onClick={button.action}
+                  className="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white 
+                  px-6 sm:px-8 py-3 sm:py-4 rounded-xl 
+                  hover:from-green-600 hover:to-blue-600 transition-all duration-300 
+                  flex items-center justify-center space-x-3 group shadow-lg hover:shadow-xl
+                  text-sm sm:text-base"
+                >
+                  <span className="font-semibold">{button.label}</span>
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -265,14 +295,20 @@ const Services = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl mx-auto p-4 mt-14">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Our Services</h1>
-          <p className="text-gray-600">Discover our range of smart farming solutions</p>
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 py-8 sm:py-16 mt-14">
+      <div className="max-w-5xl mx-auto px-4">
+        <div className="mb-8 sm:mb-12 text-center">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text 
+          bg-gradient-to-r from-green-600 to-blue-600 mb-3 sm:mb-4">
+            Smart Farming Solutions
+          </h1>
+          <p className="text-sm sm:text-lg text-gray-600 max-w-2xl mx-auto">
+            Empowering farmers with cutting-edge technology and intelligent solutions 
+            to optimize agricultural productivity and sustainability
+          </p>
         </div>
         
-        <div className="space-y-6">
+        <div className="space-y-6 sm:space-y-8">
           {services.map((service, index) => (
             <ServiceCard
               key={index}

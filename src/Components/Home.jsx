@@ -1,63 +1,57 @@
 import React, { useContext, useEffect, useState } from "react";
 import { homeBackground } from "../Assests/assets.js";
 import { AppContext } from "../Context/AppContext.jsx";
-import { Cloud, Droplets, Wind, Gauge, Search, ChevronDown, ChevronUp, AlertCircle } from "lucide-react";
+import { 
+  Cloud, Droplets, Wind, Gauge, Search, 
+  ChevronDown, ChevronUp, 
+  AlertCircle, MapPin, Newspaper 
+} from "lucide-react";
 
-const Card = ({ children, className = "" }) => (
-  <div className={`bg-white rounded-lg shadow-md ${className}`}>
+// Reusable Components
+const Card = ({ children, className = "", onClick = null }) => (
+  <div 
+    className={`bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg ${className}`}
+    onClick={onClick}
+  >
     {children}
   </div>
 );
 
-const Alert = ({ children, variant = "default" }) => {
-  const variants = {
-    default: "bg-gray-100 text-gray-800",
-    destructive: "bg-red-100 text-red-800",
-  };
-
-  return (
-    <div className={`flex items-center gap-2 p-3 rounded-lg ${variants[variant]}`}>
-      {children}
-    </div>
-  );
-};
-
-const WeatherCard = ({ title, value, unit, icon: Icon, color }) => (
-  <Card className="transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-    <div className="p-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-gray-500">{title}</p>
-          <p className={`text-2xl font-bold ${color}`}>
-            {value}<span className="text-sm">{unit}</span>
-          </p>
-        </div>
-        <Icon className={`w-8 h-8 ${color}`} />
+const NewsCard = ({ title, description, link, image }) => (
+  <Card className="flex flex-col transition-all duration-300 hover:scale-[1.02] group">
+    {image && (
+      <div className="h-40 overflow-hidden">
+        <img 
+          src={image} 
+          alt={title} 
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform"
+        />
       </div>
-    </div>
-  </Card>
-);
-
-const NewsCard = ({ title, description, link }) => (
-  <Card className="transition-all duration-300 hover:shadow-lg group">
-    <div className="p-6">
-      <h3 className="text-lg font-semibold text-gray-800 mb-2 group-hover:text-blue-600">
+    )}
+    <div className="p-4 flex-grow flex flex-col">
+      <h3 className="font-bold text-lg mb-2 text-gray-800 group-hover:text-green-600 transition-colors">
         {title}
       </h3>
-      <p className="text-sm text-gray-600 mb-3">{description}</p>
+      <p className="text-sm text-gray-600 mb-4 flex-grow">
+        {description}
+      </p>
       <a 
         href={link} 
         target="_blank" 
         rel="noopener noreferrer"
-        className="inline-flex items-center text-sm text-blue-500 hover:text-blue-700"
+        className="text-green-600 hover:text-green-800 font-medium inline-flex items-center"
       >
-        Read More →
+        Read More
+        <ChevronDown className="ml-2 w-4 h-4" />
       </a>
     </div>
   </Card>
 );
 
 const HomeScreen = () => {
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
   const {
     location,
     setLocation,
@@ -75,12 +69,11 @@ const HomeScreen = () => {
   const [newsList, setNewsList] = useState([]);
   const [errorNews, setErrorNews] = useState(null);
   const [seeMore, setSeeMore] = useState(false);
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [inputValue, setInputValue] = useState(location);
 
-  const truncateString = (str, maxLength = 200) => {
-    if (!str || str.length < 10) return "";
-    return str.length > maxLength ? `${str.slice(0, maxLength - 3)}...` : str;
+  const truncateString = (str, maxLength = 150) => {
+    if (!str) return "";
+    return str.length > maxLength ? `${str.slice(0, maxLength)}...` : str;
   };
 
   const fetchNewsData = async () => {
@@ -102,171 +95,156 @@ const HomeScreen = () => {
   };
 
   useEffect(() => {
-    fetchWeatherData();
-  }, [location]);
-
-  useEffect(() => {
-    const debounceTimer = setTimeout(() => {
-      setLocation(inputValue);
-    }, 1000);
-
-    return () => {
-      clearTimeout(debounceTimer);
-    };
-  }, [inputValue]);
-
-  useEffect(() => {
     fetchNewsData();
   }, []);
 
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
+  useEffect(() => {
+    fetchWeatherData();
+  }, [location]);
+
+  const handleSearch = () => {
+    setLocation(inputValue);
   };
 
   return (
-    <div className="relative min-h-screen w-full bg-gray-50 mt-14 mb-16">
+    <div className="bg-gradient-to-br from-green-50 to-blue-50 min-h-screen pb-10">
       {/* Hero Section */}
-      <div className="relative h-[400px] w-full overflow-hidden">
-        <img
-          src={homeBackground}
-          alt="Agricultural field"
-          className="w-full h-full object-cover transform scale-105 transition-transform duration-10000 hover:scale-100"
+      <div className="relative h-[50vh] w-full overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-green-500/70 to-blue-600/70 z-10"></div>
+        <img 
+          src={homeBackground} 
+          alt="Agricultural Landscape" 
+          className="absolute inset-0 w-full h-full object-cover opacity-50 transform scale-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/70">
-          <div className="container mx-auto px-6 h-full flex flex-col justify-end pb-12">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
-              Smart Farming Solutions
-            </h1>
-            <p className="text-xl text-gray-200 max-w-2xl">
-              Revolutionizing agriculture with real-time monitoring and advanced analytics
-            </p>
-          </div>
+        
+        <div className="relative z-20 container mx-auto px-4 h-full flex flex-col justify-center text-white text-center">
+          <h1 className="text-3xl md:text-5xl font-extrabold mb-4 drop-shadow-lg">
+            Smart Farming Intelligence
+          </h1>
+          <p className="text-md md:text-xl max-w-xl mx-auto mb-6 opacity-90">
+            Empowering farmers with real-time insights, predictive analytics, and actionable data
+          </p>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 -mt-10 relative z-10">
-        {/* Location Card */}
-        <Card className="mb-8 bg-white/95 backdrop-blur">
-          <div className="p-6">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* Main Content Container */}
+      <div className="container mx-auto px-4 -mt-16 relative z-30 space-y-6">
+        {/* Location & Search Card */}
+        <Card className="p-6 mb-6 bg-white/90 backdrop-blur-sm">
+          <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+            <div className="flex items-center space-x-3">
+              <MapPin className="w-6 h-6 text-green-600" />
               <div>
-                <h3 className="text-sm font-medium text-gray-500">Your Location</h3>
-                {error ? (
-                  <Alert variant="destructive">
-                    <AlertCircle className="h-4 w-4" />
-                    <span>Please search for a location</span>
-                  </Alert>
-                ) : (
-                  <p className="text-lg font-bold text-green-600">
-                    {location && region && country ? `${location}, ${region}, ${country}` : "Location not set"}
-                  </p>
-                )}
+                <h3 className="text-sm text-gray-500">Current Location</h3>
+                <p className="font-bold text-green-700">
+                  {location}, {region}, {country}
+                </p>
               </div>
-              <div className="flex-1 max-w-md">
-                <div className={`flex items-center p-2 border-2 rounded-lg transition-all duration-300 ${
-                  isSearchFocused ? "border-blue-500 shadow-lg" : "border-gray-200"
-                }`}>
-                  
-                  <input
-                    type="text"
-                    className="flex-1 p-2 outline-none bg-transparent"
-                    placeholder="Search location..."
-                    value={inputValue}
-                    onChange={handleInputChange}
-                    onFocus={() => setIsSearchFocused(true)}
-                    onBlur={() => setIsSearchFocused(false)}
-                  />
-                  <button
-                    onClick={fetchWeatherData}
-                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-                  >
-                    <Search className="w-4 h-6 text-white-800" />
-                  </button>
-                </div>
-              </div>
+            </div>
+            
+            <div className="w-full md:w-auto flex space-x-2">
+              <input
+                type="text"
+                placeholder="Search location..."
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 transition-all"
+              />
+              <button 
+                onClick={handleSearch}
+                className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors"
+              >
+                <Search className="w-5 h-5" />
+              </button>
             </div>
           </div>
         </Card>
 
         {/* Weather Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <WeatherCard
-            title="Humidity"
-            value={error ? "0" : humidity}
-            unit="%"
-            icon={Droplets}
-            color="text-blue-500"
-          />
-          <WeatherCard
-            title="Temperature"
-            value={error ? "0" : temperature}
-            unit="°C"
-            icon={Cloud}
-            color="text-orange-500"
-          />
-          <WeatherCard
-            title="Wind Speed"
-            value={error ? "0" : wind_kph}
-            unit="km/h"
-            icon={Wind}
-            color="text-teal-500"
-          />
-          <WeatherCard
-            title="Pressure"
-            value={error ? "0" : pressure_mb}
-            unit="mb"
-            icon={Gauge}
-            color="text-purple-500"
-          />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <Card className="p-4 bg-white/80 backdrop-blur-sm">
+            <div className="flex justify-between items-center">
+              <div>
+                <h4 className="text-sm text-gray-500">Temperature</h4>
+                <p className="text-2xl font-bold text-orange-500">
+                  {temperature}°C
+                </p>
+              </div>
+              <Cloud className="w-8 h-8 text-orange-500" />
+            </div>
+          </Card>
+
+          <Card className="p-4 bg-white/80 backdrop-blur-sm">
+            <div className="flex justify-between items-center">
+              <div>
+                <h4 className="text-sm text-gray-500">Humidity</h4>
+                <p className="text-2xl font-bold text-blue-500">
+                  {humidity}%
+                </p>
+              </div>
+              <Droplets className="w-8 h-8 text-blue-500" />
+            </div>
+          </Card>
+
+          <Card className="p-4 bg-white/80 backdrop-blur-sm">
+            <div className="flex justify-between items-center">
+              <div>
+                <h4 className="text-sm text-gray-500">Wind Speed</h4>
+                <p className="text-2xl font-bold text-teal-500">
+                  {wind_kph} km/h
+                </p>
+              </div>
+              <Wind className="w-8 h-8 text-teal-500" />
+            </div>
+          </Card>
+
+          <Card className="p-4 bg-white/80 backdrop-blur-sm">
+            <div className="flex justify-between items-center">
+              <div>
+                <h4 className="text-sm text-gray-500">Pressure</h4>
+                <p className="text-2xl font-bold text-purple-500">
+                  {pressure_mb} mb
+                </p>
+              </div>
+              <Gauge className="w-8 h-8 text-purple-500" />
+            </div>
+          </Card>
         </div>
 
         {/* News Section */}
-        <Card className="mb-8">
-          <div className="p-6">
-            <h2 className="text-2xl font-bold mb-6">Latest Agriculture News</h2>
-            <div className="space-y-4">
-              {errorNews ? (
-                <Alert>
-                  <AlertCircle className="h-4 w-4" />
-                  <span>{errorNews}</span>
-                </Alert>
-              ) : (
-                <>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {(seeMore ? newsList : newsList.slice(0, 4)).map((news, index) => (
-                      <NewsCard
-                        key={index}
-                        title={news.title}
-                        description={truncateString(news.description)}
-                        link={news.link}
-                      />
-                    ))}
-                  </div>
-                  <button
-                    onClick={() => setSeeMore(!seeMore)}
-                    className="w-full mt-4 p-3 text-blue-500 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors flex items-center justify-center gap-2"
-                  >
-                    {seeMore ? (
-                      <>Show Less <ChevronUp className="w-4 h-4" /></>
-                    ) : (
-                      <>Show More <ChevronDown className="w-4 h-4" /></>
-                    )}
-                  </button>
-                </>
-              )}
-            </div>
+        <Card className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold flex items-center">
+              <Newspaper className="mr-3 w-6 h-6 text-green-600" />
+              Latest Agriculture News
+            </h2>
+            <button
+              onClick={() => setSeeMore(!seeMore)}
+              className="text-green-600 hover:text-green-800 flex items-center"
+            >
+              {seeMore ? "Show Less" : "Show More"}
+              {seeMore ? <ChevronUp className="ml-2" /> : <ChevronDown className="ml-2" />}
+            </button>
           </div>
-        </Card>
 
-        {/* Recent Activities */}
-        <Card className="mb-8">
-          <div className="p-6">
-            <h2 className="text-2xl font-bold mb-6">Recent Activities</h2>
-            <div className="p-8 text-center text-gray-500">
-              <p className="text-lg">No recent activities to display</p>
-              <p className="text-sm mt-2">Your farming activities will appear here</p>
+          {errorNews ? (
+            <div className="flex items-center bg-red-100 p-4 rounded-lg">
+              <AlertCircle className="mr-3 w-6 h-6 text-red-600" />
+              <p className="text-red-800">{errorNews}</p>
             </div>
-          </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {(seeMore ? newsList : newsList.slice(0, 3)).map((news, index) => (
+                <NewsCard
+                  key={index}
+                  title={news.title}
+                  description={truncateString(news.description)}
+                  link={news.link}
+                  image={news.image_url || homeBackground}
+                />
+              ))}
+            </div>
+          )}
         </Card>
       </div>
     </div>

@@ -1,9 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import { ArrowLeft, Search, MapPin } from "lucide-react";
+import { ArrowLeft, Search, MapPin, Wind, Droplet, Gauge, Cloud, Sun, Cloud as CloudIcon, CloudRain } from "lucide-react";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { AppContext } from "../Context/AppContext";
 
-// Weather Component
 const WeatherComponent = ({ onBack }) => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const {
     location,
     setLocation,
@@ -22,160 +26,211 @@ const WeatherComponent = ({ onBack }) => {
   const [inputValue, setInputValue] = useState(location);
 
   function getDayOfWeek(dateStr) {
-    const date = new Date(dateStr); // Convert the date string to a Date object
+    const date = new Date(dateStr);
     const daysOfWeek = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
+      "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
     ];
-    return daysOfWeek[date.getDay()]; // getDay() returns a number (0 = Sunday, 1 = Monday, etc.)
+    return daysOfWeek[date.getDay()];
+  }
+
+  function getWeatherIcon(conditionText) {
+    const lowerCondition = conditionText.toLowerCase();
+    if (lowerCondition.includes('sunny')) return <Sun className="text-yellow-500" />;
+    if (lowerCondition.includes('cloudy')) return <CloudIcon className="text-gray-500" />;
+    if (lowerCondition.includes('rain')) return <CloudRain className="text-blue-500" />;
+    return <Cloud className="text-gray-400" />;
   }
 
   useEffect(() => {
     fetchWeatherData();
   }, [location]);
 
-  useEffect(() => {
-    const debounceTimer = setTimeout(() => {
-      setLocation(inputValue);
-    }, 1000);
+  const handleSearch = () => {
+    setLocation(inputValue);
+  };
 
-    return () => {
-      clearTimeout(debounceTimer);
-    };
-  }, [inputValue]);
+  // useEffect(() => {
+  //   const debounceTimer = setTimeout(() => {
+  //     setLocation(inputValue);
+  //   }, 1000);
+
+  //   return () => {
+  //     clearTimeout(debounceTimer);
+  //   };
+  // }, [inputValue]);
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
   };
 
+  const chartData = !error ? forcastedWeather.map((day, index) => ({
+    name: index === 0 ? 'Today' : getDayOfWeek(day.date),
+    temperature: day.day.avgtemp_c,
+    maxTemp: day.day.maxtemp_c,
+    minTemp: day.day.mintemp_c
+  })) : [];
+
   return (
-    <div className="p-4  mt-14">
-      <div className="flex items-center mb-4">
-        <button onClick={onBack} className="mr-2">
-          <ArrowLeft size={24} className="text-green-600" />
-        </button>
-        <h2 className="text-xl font-bold">Weather Forecast</h2>
-      </div>
-
-      <div className="p-4 bg-white rounded-lg shadow mb-6">
-        <h2 className="text-xl font-bold mb-4">Search Location</h2>
-        <div className="flex items-center space-x-4">
-          <input
-            type="text"
-            className="p-2 border border-gray-300 rounded-lg"
-            placeholder="Enter location"
-            value={inputValue}
-            onChange={handleInputChange}
-          />
-          <Search
-            size={24}
-            className="text-green-600"
-            onClick={fetchWeatherData}
-          />
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 p-4 mt-14">
+      <div className="max-w-md mx-auto">
+        {/* Header */}
+        <div className="flex items-center mb-6">
+          <button 
+            onClick={onBack} 
+            className="mr-4 p-2 rounded-full bg-white shadow-md hover:bg-gray-100 transition"
+          >
+            <ArrowLeft size={24} className="text-blue-600" />
+          </button>
+          <h2 className="text-2xl font-bold text-gray-800">Weather Forecast</h2>
         </div>
-      </div>
 
-      <div className="bg-white rounded-lg shadow-md p-4 space-y-4">
-        <div className="text-center p-4">
-          <div className="flex items-center space-x-4">
-            <MapPin />
-            <div className="text-start">
-              <h3 className="text-2xl font-semibold"> Current Location</h3>
-              <p className="text-gray-600">
-                {location}, {region}, {country}
-              </p>
+        {/* Search Bar */}
+        <div className="bg-white rounded-xl shadow-lg mb-6 p-4">
+          <div className="flex items-center space-x-3">
+            <input
+              type="text"
+              className="flex-grow p-3 border-2 border-blue-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              placeholder="Enter location"
+              value={inputValue}
+              onChange={handleInputChange}
+            />
+            <button 
+              onClick={handleSearch}
+              className="p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+            >
+              <Search size={20} />
+            </button>
+          </div>
+        </div>
+
+        {/* Current Weather */}
+        <div className="bg-white rounded-xl shadow-lg p-6 mb-6 relative overflow-hidden">
+          <div className="absolute top-0 right-0 opacity-20">
+            {getWeatherIcon(condition)}
+          </div>
+          
+          <div className="flex items-center mb-4">
+            <MapPin className="mr-3 text-blue-600" />
+            <div>
+              <h3 className="text-xl font-semibold text-gray-800">{location}</h3>
+              <p className="text-gray-500">{region}, {country}</p>
             </div>
           </div>
-        </div>
 
-        <div className="text-center p-4">
-          <h3 className="text-2xl font-semibold">Today</h3>
-          {!error && (
-            <p className="text-4xl font-bold text-blue-600 my-2">
-              {temperature}°C
+          <div className="text-center">
+            <h3 className="text-lg text-gray-600 mb-2">Today</h3>
+            <p className="text-5xl font-bold text-blue-600 mb-2">
+              {!error ? `${temperature}°C` : '0°C'}
             </p>
-          )}
-          {error && (
-            <p className="text-4xl font-bold text-blue-600 my-2">0°C</p>
-          )}
-          {!error && <p className="text-gray-600">{condition}</p>}
-          {error && <p className="text-gray-600">Not Available</p>}
-        </div>
+            <p className="text-gray-500">{!error ? condition : 'Not Available'}</p>
+          </div>
 
-        <div className="grid grid-cols-3 gap-2">
-          <div className="bg-gray-50 p-2 rounded-lg text-center">
-            <p className="font-semibold">Humidity</p>
-            {!error && <p className="text-sm">{humidity}%</p>}
-            {error && <p className="text-sm">0%</p>}
-          </div>
-          <div className="bg-gray-50 p-2 rounded-lg text-center">
-            <p className="font-semibold">Wind</p>
-            {!error && <p className="text-sm">{wind_kph} km/h</p>}
-            {error && <p className="text-sm">0 km/h</p>}
-          </div>
-          <div className="bg-gray-50 p-2 rounded-lg text-center">
-            <p className="font-semibold">Pressure</p>
-            {!error && <p className="text-sm">{pressure_mb} mb</p>}
-            {error && <p className="text-sm">0 mb</p>}
+          {/* Weather Details Grid */}
+          <div className="grid grid-cols-3 gap-3 mt-6">
+            <WeatherDetailCard 
+              icon={<Droplet className="text-blue-500" />} 
+              label="Humidity" 
+              value={!error ? `${humidity}%` : '0%'} 
+            />
+            <WeatherDetailCard 
+              icon={<Wind className="text-green-500" />} 
+              label="Wind" 
+              value={!error ? `${wind_kph} km/h` : '0 km/h'} 
+            />
+            <WeatherDetailCard 
+              icon={<Gauge className="text-purple-500" />} 
+              label="Pressure" 
+              value={!error ? `${pressure_mb} mb` : '0 mb'} 
+            />
           </div>
         </div>
-      </div>
 
-      <div className="flex items-center mb-4 mt-4">
-        <div className="w-full max-w-md mx-auto bg-white shadow-lg rounded-xl p-6">
-          <div className="mb-6">
-            <h1 className="text-xl font-bold text-center text-gray-800">
-              7-Day Weather Forecast
-            </h1>
+        {!error && (
+          <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <h2 className="text-xl font-bold text-center mb-6 text-gray-800">
+              Temperature Forecast
+            </h2>
+            <ResponsiveContainer width="100%" height={250}>
+              <LineChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis dataKey="name" stroke="#8884d8" />
+                <YAxis stroke="#8884d8" />
+                <Tooltip 
+                  contentStyle={{ backgroundColor: '#f5f5f5', border: '1px solid #ddd' }}
+                  labelStyle={{ fontWeight: 'bold', color: '#333' }}
+                />
+                <Legend />
+                <Line 
+                  type="monotone" 
+                  dataKey="temperature" 
+                  stroke="#8884d8" 
+                  activeDot={{ r: 8 }} 
+                  name="Average Temperature"
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="maxTemp" 
+                  stroke="#82ca9d" 
+                  name="Maximum Temperature"
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="minTemp" 
+                  stroke="#ff7300" 
+                  name="Minimum Temperature"
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
+        )}
 
-          <div className="space-y-4">
-            {error && <p className="text-gray-600 pl-4">Not Available</p>}
-            {!error && forcastedWeather.map((day, index) => (
-              <div
-                key={day.date}
-                className={`flex items-center justify-between p-4 rounded-lg ${
-                  index === 0 ? "bg-blue-50" : "bg-gray-50"
-                } shadow-sm hover:shadow-md transition-shadow duration-200`}
-              >
-                
-                <div className="flex flex-col">
-                    {index===0 
-                    ? <span className="font-semibold text-lg text-gray-800">Tomorrow</span>
-                    : <span className="font-semibold text-lg text-gray-800">{getDayOfWeek(day.date)}</span>
-                    }
-                  
-                  <span className="text-sm text-gray-600">
-                    Humidity: {day.day.avghumidity}%
-                  </span>
-                  <span className="text-sm text-gray-600">
-                    Wind: {day.day.maxwind_kph} mph
-                  </span>
-                  <div className="text-sm text-gray-600">
-                    Precipitation: {day.day.totalprecip_mm} mm
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-4">
-                  <div className="text-right">
-                    <div className="text-2xl font-bold text-gray-800">
-                      {day.day.avgtemp_c}°C
-                    </div>
-                    {day.day.condition.text}
-                  </div>
+        {/* 7-Day Forecast */}
+        <div className="bg-white rounded-xl shadow-lg p-6">
+          <h2 className="text-xl font-bold text-center mb-6 text-gray-800">
+            7-Day Forecast
+          </h2>
+          
+          {error && <p className="text-center text-gray-500">Forecast Not Available</p>}
+          
+          {!error && forcastedWeather.map((day, index) => (
+            <div 
+              key={day.date} 
+              className={`flex items-center justify-between p-4 rounded-lg mb-3 ${
+                index === 0 ? 'bg-blue-50' : 'bg-gray-50'
+              } hover:scale-[1.02] transition-transform`}
+            >
+              <div>
+                <p className="font-semibold text-gray-800">
+                  {index === 0 ? 'Tomorrow' : getDayOfWeek(day.date)}
+                </p>
+                <div className="text-sm text-gray-500">
+                  {getWeatherIcon(day.day.condition.text)}
                 </div>
               </div>
-            ))}
-          </div>
+              
+              <div className="text-right">
+                <p className="text-2xl font-bold text-blue-600">
+                  {day.day.avgtemp_c}°C
+                </p>
+                <p className="text-sm text-gray-500">
+                  {day.day.condition.text}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
   );
 };
+
+// Reusable Weather Detail Card Component
+const WeatherDetailCard = ({ icon, label, value }) => (
+  <div className="bg-gray-50 p-3 rounded-lg text-center">
+    <div className="flex justify-center mb-2">{icon}</div>
+    <p className="text-sm text-gray-600">{label}</p>
+    <p className="font-semibold text-gray-800">{value}</p>
+  </div>
+);
 
 export default WeatherComponent;
