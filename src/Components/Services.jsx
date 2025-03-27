@@ -9,8 +9,8 @@ import RecommendationComponent from "./CropRecommendation";
 import DiseaseDetectionComponent from "./CropDieseaseDetection";
 import { toast } from "react-toastify";
 import FarmerTraning from "./FarmerTraining";
-import SoilHealth from "./SoilHealth";
 import IrrigationManagement from "./IrrigationManagement";
+import FertilizerPredictionComponent from "./FertilizerPrediction"
 
 const ServiceCard = ({ service, index, isSelected, onSelect, onAction }) => {
   useEffect(() => {
@@ -19,9 +19,9 @@ const ServiceCard = ({ service, index, isSelected, onSelect, onAction }) => {
   const icons = {
     "Weather Forecasting": Cloud,
     "Smart Crop Recommendation": Leaf,
+    "Fertilizer Prediction": FlaskConical,
     "Plant Disease Detection": Bug,
     "Irrigation Management": Droplet,
-    "Soil Health Analysis": FlaskConical,
     "Farmer Training": BookOpen,
   };
   const IconComponent = icons[service.title];
@@ -179,6 +179,28 @@ const Services = () => {
       }],
     },
     {
+      "title": "Fertilizer Prediction",
+      "shortDescription": "AI-powered fertilizer recommendations for optimal crop growth",
+      "fullDescription": "Get accurate fertilizer suggestions based on soil conditions, crop type, and environmental factors. Improve yield and reduce waste with data-driven decisions.",
+      "features": [
+        "AI-driven fertilizer recommendations",
+        "Crop-specific nutrient requirements",
+        "Weather-based adjustment suggestions",
+        "Optimal application timing",
+        "Cost-effective fertilizer usage"
+      ],
+      "actionButtons": [{
+        "label": "Predict Fertilizer",
+        "action": () => {
+          if (!token) {
+            toast.warn('Login to continue')
+          } else {
+            setActiveComponent("fertilizer")
+          }
+        }
+      }]
+    },    
+    {
       title: "Plant Disease Detection",
       shortDescription: "Early detection and prevention of plant diseases",
       fullDescription:
@@ -222,29 +244,6 @@ const Services = () => {
         },
       }],
     },
-    // {
-    //   title: "Soil Health Analysis",
-    //   shortDescription: "Comprehensive soil testing and management solutions",
-    //   fullDescription:
-    //     "Get detailed insights into your soil's health with our advanced analysis tools. Receive personalized recommendations for soil improvement and maintenance.",
-    //   features: [
-    //     "Detailed nutrient analysis",
-    //     "pH level monitoring",
-    //     "Organic matter content assessment",
-    //     "Fertilizer recommendations",
-    //     "Soil improvement tracking",
-    //   ],
-    //   actionButtons: [{
-    //     label: "Analyze Soil",
-    //     action: () => {
-    //       if(!token) {
-    //         toast.warn('Login to continue')
-    //       } else {
-    //         setActiveComponent("soil")
-    //       }
-    //     },
-    //   }],
-    // },
     {
       title: "Farmer Training",
       shortDescription: "Educational resources and training programs for farmers",
@@ -274,6 +273,10 @@ const Services = () => {
     return <RecommendationComponent onBack={handleBack} />;
   }
 
+  if (activeComponent === "fertilizer") {
+    return <FertilizerPredictionComponent onBack={handleBack} />;
+  }
+
   if (activeComponent === "disease") {
     return <DiseaseDetectionComponent onBack={handleBack} />;
   }
@@ -286,9 +289,6 @@ const Services = () => {
     return <IrrigationManagement onBack={handleBack} />;
   }
 
-  if (activeComponent === "soil") {
-    return <SoilHealth onBack={handleBack} />;
-  }
 
   if (activeComponent === "training") {
     return <FarmerTraning onBack={handleBack} />;
